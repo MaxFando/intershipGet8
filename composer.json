@@ -1,0 +1,13 @@
+{
+    "name": "slowprog/amojet_v2",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+      "psr-4": {
+        "": "app/"
+      }
+    },
+    "require": {
+      "php": "^7.1"
+    }
+  }
