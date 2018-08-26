@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     restart: always
     ports:
-      - "8080:80"
+      - "8090:80"
     volumes:
       - ./public:/var/www/html/public
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
@@ -21,3 +21,14 @@ services:
         - ./public:/var/www/html/public
     ports:
           - "9000:9000"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: qwerty123
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

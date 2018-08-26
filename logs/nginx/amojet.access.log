@@ -1,0 +1,3 @@
+172.23.0.1 - - [26/Aug/2018:21:41:45 +0000] "GET / HTTP/1.1" 404 571 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
+172.23.0.1 - - [26/Aug/2018:21:41:46 +0000] "GET /favicon.ico HTTP/1.1" 404 571 "http://localhost:8090/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
+172.23.0.1 - - [26/Aug/2018:21:42:19 +0000] "GET /public HTTP/1.1" 404 571 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
