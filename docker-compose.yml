@@ -1,11 +1,25 @@
-version: '3.2'
-
+version: '2.0'
 services:
+
+  db:
+    build: ./db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty123
+    volumes:
+        - ./database:/var/lib/mysql
+
+  adminer:
+    build: ./adminer
+    restart: always
+    ports:
+      - 8080:8080
+
   nginx:
     image: nginx:latest
     restart: always
     ports:
-      - "8090:80"
+      - "6080:80"
     volumes:
       - ./public:/var/www/html/public
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
@@ -21,14 +35,3 @@ services:
         - ./public:/var/www/html/public
     ports:
           - "9000:9000"
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: qwerty123
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
