@@ -1,37 +1,55 @@
-version: '2.0'
+version: '2'
+
 services:
-
-  db:
-    build: ./db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: qwerty123
-    volumes:
-        - ./database:/var/lib/mysql
-
-  adminer:
-    build: ./adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   nginx:
-    image: nginx:latest
+    image: nginx:stable
+    container_name: nginx
     restart: always
     ports:
-      - "6080:80"
+      - "8080:80"
     volumes:
+      - ./app:/var/ww/html/app
       - ./public:/var/www/html/public
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./logs/nginx:/var/log/nginx
     links:
       - phalcon
 
+  db:
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty123
+    volumes:
+        - ./database:/var/lib/mysql
+    links: 
+      - phalcon
+
   phalcon:
     image: phalconphp/php-fpm:7-min
+    container_name: phalcon
     restart: always
-    volumes:
-        - ./app:/var/www/html/app
-        - ./public:/var/www/html/public
     ports:
           - "9000:9000"
+    volumes:
+          - ./app:/var/www/html/app
+          - ./public:/var/www/html/public
+          - ./vendor:/var/www/html/vendor
+
+  redis:
+      image: redis:alpine
+      restart: always
+      links:
+            - phalcon
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on: 
+      - db
+    restart: always
+    ports:
+      - "8090:80"
+    environment:
+      - PMA_ARBITRARY=1

@@ -1,0 +1,14 @@
+{
+    "name": "rjeny/amojet",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+      "psr-4": {
+        "": "app/"
+      }
+    },
+    "require": {
+      "php": "^7.1",
+      "ext-mysqli": "*"
+    }
+  }

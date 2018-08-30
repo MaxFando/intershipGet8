@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+    phalcon:
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile
+        volumes:
+            - ./app:/var/www/html/app
+            - ./public:/var/www/html/public
+            - ./vendor:/var/www/html/vendor
