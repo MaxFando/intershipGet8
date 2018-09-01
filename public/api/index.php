@@ -1,28 +1,72 @@
 <?php 
- $host    = 'db:3306';
- $user    = 'root';
- $pass    = 'qwerty123';
- $db_name = 'Test';
 
- $link = new mysqli($host, $user, $pass, $db_name);
+use Phalcon\Loader;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\Application;
+use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\Url as UrlProvider;
+use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 
- if (!$link) {
-     die('Ошибка подключения (' . mysqli_connect_errno() . ') '
-             . mysqli_connect_error());
- }
+define('ROOT_PATH', __DIR__ . '/../..');
+define('APP_PATH', ROOT_PATH . '/app');
+define('VENDOR_PATH', ROOT_PATH . '/vendor');
 
- if($_REQUEST['to_bd'] === 'YES') {
-     $keys = explode(',', $_GET['keys']);
-     $values = explode(',', $_GET['values']);
+// Register an autoloader
+$loader = new Loader();
 
-     for ($i = 0; $i < count($keys); $i++) {
-         mysqli_query($link, "INSERT INTO `Test` (`basic`, `value`) VALUES ('$keys[$i]', '$values[$i]')");
-     }
-     echo 'Выполнено ';
-     print_r($_REQUEST);
- }
+$loader->registerDirs(
+    [
+        APP_PATH . '/controllers/',
+        APP_PATH . '/models/',
+    ]
+);
 
- mysqli_close($link);
+$loader->register();
 
+// Create a DI
+$di = new FactoryDefault();
 
-?>
+// Setup the view component
+$di->set(
+    'view',
+    function () {
+        $view = new View();
+        $view->setViewsDir(APP_PATH . '/views/');
+        return $view;
+    }
+);
+
+// Setup a base URI so that all generated URIs include the "tutorial" folder
+$di->set(
+    'url',
+    function () {
+        $url = new UrlProvider();
+        $url->setBaseUri('/');
+        return $url;
+    }
+);
+
+// $di->set(
+//     'db',
+//     function () {
+//         return new DbAdapter(
+//             [
+//                 'host'     => 'db:3306',
+//                 'username' => 'root',
+//                 'password' => 'qwerty123',
+//                 'dbname'   => 'Blog',
+//             ]
+//         );
+//     }
+// );
+
+$application = new Application($di);
+
+try {
+    // Handle the request
+    $response = $application->handle();
+
+    $response->send();
+} catch (\Exception $e) {
+    echo 'Exception: ', $e->getMessage();
+}
