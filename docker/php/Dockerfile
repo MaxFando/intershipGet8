@@ -1,4 +1,4 @@
-FROM phalconphp/php-fpm:7-min
+FROM mileschou/phalcon:7.2-fpm
 
 ENV SYMFONY_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -7,15 +7,10 @@ RUN  curl -sS https://getcomposer.org/installer | php -- \
                 --install-dir=/usr/local/bin \
                 --filename=composer
 
-RUN pecl install -o -f redis \
-&&  rm -rf /tmp/pear \
-&&  docker-php-ext-enable redis
+RUN apt-get update && apt-get install -y libssl-dev && rm -rf /var/lib/apt/lists/*
 
-COPY composer.json ./
-COPY composer.lock ./
-
-RUN composer install --no-dev --no-suggest --no-progress --prefer-dist --no-scripts \
-    && rm -rf /root/.composer/cache
-
-RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
-RUN docker-php-ext-install pdo pdo_mysql
+RUN pecl channel-update pecl.php.net && pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && docker-php-ext-enable redis

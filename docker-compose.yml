@@ -27,7 +27,8 @@ services:
       - phalcon
 
   phalcon:
-    image: phalconphp/php-fpm:7-min
+    # image: phalconphp/php-fpm:7-min
+    build: ./docker/php/
     container_name: phalcon
     restart: always
     ports:
@@ -36,6 +37,7 @@ services:
           - ./app:/var/www/html/app
           - ./public:/var/www/html/public
           - ./vendor:/var/www/html/vendor
+          - ./composer.json:/var/www/html/composer.json
 
   redis:
       image: redis:alpine

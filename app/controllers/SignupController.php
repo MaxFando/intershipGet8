@@ -6,7 +6,7 @@ class SignupController extends Controller
 {
     public function indexAction()
     {
-        
+
     }
 
     public function registerAction()
@@ -14,18 +14,16 @@ class SignupController extends Controller
         $user = new Users();
 
         // Store and check for errors
-        $success = $user->save(
-            $this->request->getPost(),
-            [
-                "name",
-                "email",
-            ]
-        );
+
+        $user->name = $this->request->get('name');
+        $user->email = $this->request->get('email');
+
+        $success = $user->save();
 
         if ($success) {
-            echo "Спасибо за регистрацию!";
+            echo "Thanks for registering!";
         } else {
-            echo "К сожалению, возникли следующие проблемы: ";
+            echo "Sorry, the following problems were generated: ";
 
             $messages = $user->getMessages();
 

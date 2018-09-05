@@ -5,11 +5,13 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Db\Adapter\MongoDB\Client;
 
 define('ROOT_PATH', __DIR__ . '/../..');
 define('APP_PATH', ROOT_PATH . '/app');
 define('VENDOR_PATH', ROOT_PATH . '/vendor');
+
+require_once ROOT_PATH . '/vendor/autoload.php';
 
 // Register an autoloader
 $loader = new Loader();
@@ -25,6 +27,29 @@ $loader->register();
 
 // Create a DI
 $di = new FactoryDefault();
+
+$di->set(
+    'mongo',
+    function (){
+
+
+        $dsn = sprintf(
+          'mongodb://%s:%s@%s', 'root', 'example', 'mongo'
+        );
+
+        $mongo = new Client($dsn);
+
+        return $mongo->selectDatabase('Blog');
+    },
+    true
+);
+
+$di->set(
+    "collectionManager",
+    function () {
+        return new \Phalcon\Mvc\Collection\Manager();
+    }
+);
 
 // Setup the view component
 $di->set(
@@ -46,12 +71,12 @@ $di->set(
     }
 );
 
-// $di->set(
+// $di->set( 
 //     'db',
 //     function () {
 //         return new DbAdapter(
 //             [
-//                 'host'     => 'db:3306',
+//                 'host'     => 'mongo:27017',
 //                 'username' => 'root',
 //                 'password' => 'qwerty123',
 //                 'dbname'   => 'Blog',
@@ -59,6 +84,7 @@ $di->set(
 //         );
 //     }
 // );
+
 
 $application = new Application($di);
 
