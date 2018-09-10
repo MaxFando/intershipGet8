@@ -1,0 +1,17 @@
+<h2>Edit post</h2>
+<br>
+<?php echo $this->tag->form(array("post/edit", "class" => "form-group")); ?>
+    <p>
+        <label for="name">Title</label>
+        <?php echo $this->tag->textField(array("title", "class" => "form-control")); ?>
+    </p>
+    <p>
+        <label for="email">Body</label>
+        <?php echo $this->tag->textField(array("body", "class" => "form-control")); ?>
+    </p>
+
+    <p>
+        <?php echo $this->tag->submitButton(array("Sent", "class" => "btn btn-primary")); ?>
+    </p>
+
+</form>

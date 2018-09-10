@@ -1,0 +1,21 @@
+<?php use Phalcon\Tag as Tag; ?>
+
+<div align="center">
+
+	<h1>
+		<?php echo $post->title ?>
+	</h1>
+
+	<p>
+		<?php echo $post->body ?>
+	</p>
+
+	<form action="/post/delete/<?php echo $post->_id; ?>" method="post">
+		<button type="submit">Delete</button>
+	</form>
+
+	<form action="/post/edit/<?php echo $post->_id; ?>" method="post">
+		<button type="submit">Edit</button>
+	</form>
+
+</div>
