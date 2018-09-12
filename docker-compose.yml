@@ -15,17 +15,6 @@ services:
     links:
       - phalcon
 
-  db:
-    image: mariadb
-    container_name: mariadb
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: qwerty123
-    volumes:
-        - ./database:/var/lib/mysql
-    links: 
-      - phalcon
-
   phalcon:
     # image: phalconphp/php-fpm:7-min
     build: ./docker/php/
@@ -44,17 +33,6 @@ services:
       restart: always
       links:
             - phalcon
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    depends_on: 
-      - db
-    restart: always
-    ports:
-      - "8090:80"
-    environment:
-      - PMA_ARBITRARY=1
 
   mongo:
     image: mongo

@@ -63,24 +63,25 @@ class PostController extends Controller
     public function editAction($id)
     {
         $posts = Posts::findById($id);
-        if(!$posts) {
-            $this->flash->error("Post wasn't found");
-            return $this->dispatcher->forward([
-                'action' => 'show'
-            ]);
-        }
+        
+        $this->view->title=$posts->title;
+        $this->view->body=$posts->body;
+    }
 
-        if ($this->request->isPost()) {
-            $posts->title = $this->request->getPost('title');
-            $posts->body = $this->request->getPost('body');
+    public function updateAction($id)
+    {
+        $posts = Posts::findById($id);
 
-            if ($posts->save()) {
-                $this->flash->error($posts->getMessages());
-            } else {
-                $this->flash->success('Post was updated sucessfully');
-            }
+        if(!$posts) { echo 'FUCK '; }
 
-            Tag::resetInput();
+        $posts->title = $this->request->get("title");
+        $posts->body = $this->request->get("body");
+        $success = $posts->save();
+
+        if (!$success) {
+            echo "It doesn't working";
+        } else {
+            echo 'Updated';
         }
     }
 
